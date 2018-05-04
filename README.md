@@ -2,10 +2,10 @@
 
 With this script you can do 2 powerful things:
 
-- Inject a __dylib__ or __framework__ to an iOS app
-- Re-codesigning an iOS app
+- Inject a __dylib__ or __framework__ to an iOS bundle
+- Re-codesigning an iOS bundle
 
-> iOS app could be .ipa or .app file.
+> iOS bundle could be .ipa/.app/.framework files.
 
 # Usage
 
