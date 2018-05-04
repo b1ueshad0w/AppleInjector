@@ -416,7 +416,7 @@ def re_codesign(app_or_ipa, signing_identity, output_path, provision_path=None):
     Re-codesign APP (or IPA with output_ipa=True) file.
     :param app_or_ipa: filepath of app or ipa
     :param provision_path: filepath of mobile provisioning profile
-    :param signing_identity: code signing identity (e.g. iPhone Developer: SNG Tencent (DVLQK89SF3) )
+    :param signing_identity: code signing identity (e.g. iPhone Developer: XXX (XXXXX) )
     :param to_dir: output directory
     :param output_ipa: Will return IPA rather than APP if set to True
     :return: output file path
@@ -504,40 +504,6 @@ def recodesign_framework_recursively(framework_path, signing_identity, output_fi
     if not safe_check_call(_cmd):
         return False
     return True
-
-
-def injectForPorduct(product):
-    from start import build_dylib_for_product
-    from fbsimctl import install
-    from lib.libimobiledevice.idevicewrapper import install_ipa_to_device
-    from config import PROVISION_DIR, IPHONEOS_TOOLS_PATH
-    from business.configparser import Config
-    from business.globalinfo import Arch
-    from business.getpackagerdm import get_local_latest_build_svn, fetch_local_build_by_revision
-    logging.basicConfig(level=logging.DEBUG)
-    identity = 'iPhone Developer: SNG Tencent (DVLQK89SF3)'
-    tencentSNGgx = os.path.join(PROVISION_DIR, 'TencentSNGzx.mobileprovision')
-    mqqTestZX = os.path.join(PROVISION_DIR, 'MQQ_Test_zx.mobileprovision')
-
-    arch = Arch.ARM64
-    Config.load_product(product)
-    job_id = Config.job_id
-    ipa_regex = Config.ipa_regex_rdm
-    dsym_regex = Config.dsym_regex_rdm
-    svn = get_local_latest_build_svn(job_id)
-    files = fetch_local_build_by_revision(job_id, svn, (ipa_regex, dsym_regex))
-    ipa = files[ipa_regex]
-
-    output_path = ipa.replace('.ipa', '.injected.ipa').replace('.app', '.injected.app')
-    # dylib_path = build_dylib_for_product(product, os.path.dirname(ipa), arch)
-    dylib_path = os.path.join(IPHONEOS_TOOLS_PATH, 'libmonkey.framework')
-
-    ret = inject_and_recodesign(ipa, dylib_path, output_path, provision_path=tencentSNGgx, signing_identity=identity)
-    logger.info('Injection %s.' % 'success' if ret else 'failed')
-
-    udid = ''
-    install_ret = install_ipa_to_device(output_path, udid=udid)
-    logger.info('Installation %s.' % 'success' if install_ret else 'failed')
 
 
 def set_start_arguments():
