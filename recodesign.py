@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-""" inject.py: 
+""" inject.py: Injection to an iOS app or re-codesign it.
 
 Created by gogleyin on 26/12/2016.
 """
